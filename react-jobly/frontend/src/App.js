@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
-import { Switch, Route, BrowserRouter } from 'react-router-dom';
-import './App.css';
-import NavBar from './NavBar';
-import Routes from './routes/Routes';
-import JoblyApi from './api';
+import React, { Component } from "react";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
+import "./App.css";
+import NavBar from "./NavBar";
+import Routes from "./routes/Routes";
+import JoblyApi from "./api";
 import { decode } from "jsonwebtoken";
-import CurrentUserContext from './users/CurrentUserContext';
-import PrivateRoute from './routes/PrivateRoute';
+import CurrentUserContext from "./users/CurrentUserContext";
+import PrivateRoute from "./routes/PrivateRoute";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUser: null,
-    }
+      appliedJobs: [],
+    };
 
     this.getCurrentUser = this.getCurrentUser.bind(this);
   }
@@ -22,7 +23,10 @@ class App extends Component {
     let currentUser = await this.getCurrentUser();
     console.log(currentUser);
     if (currentUser !== undefined) {
-      this.setState({ currentUser: currentUser.username });
+      this.setState({
+        currentUser: currentUser.username,
+        appliedJobs: currentUser.applications,
+      });
     }
   }
 
@@ -38,22 +42,24 @@ class App extends Component {
   }
 
   render() {
-    let background = this.state.currentUser ? "" : "https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80";
+    let background = this.state.currentUser
+      ? ""
+      : "https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80";
 
     return (
-      <CurrentUserContext.Provider value={this.state.currentUser}>
-        <div className='App' style={{ background: `url(${background})`}}>
+      <CurrentUserContext.Provider value={this.state}>
+        <div className="App" style={{ background: `url(${background})` }}>
           <BrowserRouter>
             <NavBar />
             <main>
               <Switch>
-                <Routes render={props => <Route {...props} />} />
+                <Routes render={(props) => <Route {...props} />} />
               </Switch>
             </main>
           </BrowserRouter>
         </div>
       </CurrentUserContext.Provider>
-    )
+    );
   }
 }
 

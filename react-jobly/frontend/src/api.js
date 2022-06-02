@@ -21,9 +21,7 @@ class JoblyApi {
     //this has been provided to show you another way to pass the token. you are only expected to read this code for this project.
     const url = `${BASE_URL}/${endpoint}`;
     const headers = { Authorization: `Bearer ${JoblyApi.token}` };
-    const params = (method === "get")
-      ? data
-      : {};
+    const params = method === "get" ? data : {};
 
     try {
       return (await axios({ url, method, data, params, headers })).data;
@@ -68,7 +66,7 @@ class JoblyApi {
     return res.token;
   }
 
-  static async sigUp(data) {
+  static async signUp(data) {
     let res = await this.request("auth/register", data, "post");
     return res.token;
   }
@@ -84,17 +82,17 @@ class JoblyApi {
   }
 
   /** Apply for job: update db, returns undefined.
- *
- * - username: username applying for job
- * - jobId: job id
- **/
+   *
+   * - username: username applying for job
+   * - jobId: job id
+   **/
 
   /** POST /[username]/jobs/[id]  { state } => { application }
-*
-* Returns {"applied": jobId}
-*
-* Authorization required: admin or same-user-as-:username
-* */
+   *
+   * Returns {"applied": jobId}
+   *
+   * Authorization required: admin or same-user-as-:username
+   * */
 
   static async applyToJob(username, jobId) {
     await this.request(`users/${username}/jobs/${jobId}`, {}, "post");
@@ -102,7 +100,8 @@ class JoblyApi {
 }
 
 // for now, put token ("testuser" / "password" on class)
-JoblyApi.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
+JoblyApi.token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
   "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
   "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
 
