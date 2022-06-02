@@ -1,0 +1,11 @@
+.App {
+  text-align: center;
+  height: 100vh;
+  overflow: auto;
+  background-size: cover !important;
+
+}
+
+.app-wrap {
+  margin-top: 10px;
+}
